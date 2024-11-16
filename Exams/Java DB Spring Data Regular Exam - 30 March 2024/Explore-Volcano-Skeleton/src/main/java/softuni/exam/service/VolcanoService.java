@@ -1,8 +1,12 @@
 package softuni.exam.service;
 
+import softuni.exam.models.entity.Volcano;
+import softuni.exam.models.entity.Volcanologist;
+
 import java.io.IOException;
 
 // TODO: Implement all methods
+
 public interface VolcanoService {
 
     boolean areImported();
@@ -12,7 +16,7 @@ public interface VolcanoService {
     String importVolcanoes() throws IOException;
 
 //    Volcano findVolcanoById(Long volcanoId);
-//
+
 //    void addAndSaveAddedVolcano(Volcano volcano, Volcanologist volcanologist);
 
     String exportVolcanoes();

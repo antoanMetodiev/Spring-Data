@@ -7,6 +7,7 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.spi.MappingContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import softuni.exam.util.LocalDateAdapter;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -16,11 +17,14 @@ import java.time.format.DateTimeFormatter;
 @Configuration
 public class ApplicationBeanConfiguration {
 
-
     @Bean
     public Gson gson() {
-        //TODO
-        return null;
+        return new GsonBuilder()
+                .setPrettyPrinting()
+                .setDateFormat("yyyy-MM-dd")
+                .registerTypeAdapter(LocalDate.class, new LocalDateAdapter()) // Регистриране на LocalDate адаптер
+                .excludeFieldsWithoutExposeAnnotation()
+                .create();
     }
 
 
