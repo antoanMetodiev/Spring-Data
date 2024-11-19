@@ -3,7 +3,7 @@ package softuni.exam.service.impl;
 import com.google.gson.Gson;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-import softuni.exam.models.dto.jsons.SellersDto;
+import softuni.exam.models.dto.jsons.SellerDto;
 import softuni.exam.models.entity.Seller;
 import softuni.exam.repository.SellerRepository;
 import softuni.exam.service.SellerService;
@@ -16,19 +16,20 @@ import java.util.Optional;
 
 @Service
 public class SellerServiceImpl implements SellerService {
-    private static final String FILE_PATH = "src/main/resources/files/json/sellers.json";
+    private final String FILE_PATH = "src/main/resources/files/json/sellers.json";
 
     private final SellerRepository sellerRepository;
-    private final Gson gson;
     private final ModelMapper modelMapper;
     private final ValidationUtilImpl validationUtil;
+    private final Gson gson;
 
-    public SellerServiceImpl(SellerRepository sellerRepository, Gson gson, ModelMapper modelMapper, ValidationUtilImpl validationUtil) {
+    public SellerServiceImpl(SellerRepository sellerRepository, ModelMapper modelMapper, ValidationUtilImpl validationUtil, Gson gson) {
         this.sellerRepository = sellerRepository;
-        this.gson = gson;
         this.modelMapper = modelMapper;
         this.validationUtil = validationUtil;
+        this.gson = gson;
     }
+
 
     @Override
     public boolean areImported() {
@@ -44,21 +45,20 @@ public class SellerServiceImpl implements SellerService {
     public String importSellers() throws IOException {
         StringBuilder sb = new StringBuilder();
 
-        SellersDto[] sellersDto = this.gson.fromJson(readSellersFromFile(), SellersDto[].class);
-        for (SellersDto seller : sellersDto) {
-            Optional<Seller> response =
-                    this.sellerRepository.findByLastNameOrPersonalNumber(seller.getLastName(), seller.getPersonalNumber());
+        SellerDto[] sellerDtos = this.gson.fromJson(readSellersFromFile(), SellerDto[].class);
+        for (SellerDto seller : sellerDtos) {
 
-            System.out.println();
-            if (!this.validationUtil.isValid(seller) || response.isPresent()) {
+            Optional<Seller> byLastName = this.sellerRepository.findByLastName(seller.getLastName());
+            if (!this.validationUtil.isValid(seller) || byLastName.isPresent()) {
                 sb.append("Invalid seller").append(System.lineSeparator());
                 continue;
             }
 
-            Seller persistObj = this.modelMapper.map(seller, Seller.class);
-            this.sellerRepository.saveAndFlush(persistObj);
+            Seller forPers = this.modelMapper.map(seller, Seller.class);
+            this.sellerRepository.saveAndFlush(forPers);
             sb.append(String.format("Successfully imported seller %s %s"
-                    , seller.getFirstName(), seller.getLastName())).append(System.lineSeparator());
+                            , seller.getFirstName(), seller.getLastName()))
+                    .append(System.lineSeparator());
         }
 
         return sb.toString();

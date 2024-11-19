@@ -11,6 +11,5 @@ import java.util.Optional;
 //TODO
 @Repository
 public interface SaleRepository extends JpaRepository<Sale, Long> {
-
-    Optional<Sale> findSaleByNumber(@Size(min = 7, max = 7) @NotNull String number);
+    Optional<Sale> findByNumber(@NotNull @Size(min = 7, max = 7) String number);
 }

@@ -1,34 +1,33 @@
-package softuni.exam.models.entity;
+package softuni.exam.models.dto.jsons;
 
-import javax.persistence.*;
+import com.google.gson.annotations.Expose;
+
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "sales")
-public class Sale extends BaseEntity {
-
-    @Column
+public class SaleDto {
     private boolean discounted;
 
-    @Column(unique = true, nullable = false)
+    @NotNull
+    @Size(min = 7, max = 7)
+    @Expose
     private String number;
 
-    @Column(name = "sale_date", nullable = false)
+    @Expose
     private LocalDateTime saleDate;
 
-    @ManyToOne
-    @JoinColumn(name = "seller_id", referencedColumnName = "id")
-    private Seller seller;
+    @Expose
+    private long seller;
 
-    public Sale(boolean discounted, String number, LocalDateTime saleDateTime, Seller seller) {
+    public SaleDto(boolean discounted, String number, LocalDateTime saleDate, long seller) {
         this.discounted = discounted;
         this.number = number;
-        this.saleDate = saleDateTime;
+        this.saleDate = saleDate;
         this.seller = seller;
     }
 
-    public Sale() {}
+    public SaleDto() {}
 
     public boolean isDiscounted() {
         return discounted;
@@ -38,11 +37,11 @@ public class Sale extends BaseEntity {
         this.discounted = discounted;
     }
 
-    public String getNumber() {
+    public @NotNull @Size(min = 7, max = 7) String getNumber() {
         return number;
     }
 
-    public void setNumber(String number) {
+    public void setNumber(@NotNull @Size(min = 7, max = 7) String number) {
         this.number = number;
     }
 
@@ -54,11 +53,11 @@ public class Sale extends BaseEntity {
         this.saleDate = saleDate;
     }
 
-    public Seller getSeller() {
+    public long getSeller() {
         return seller;
     }
 
-    public void setSeller(Seller seller) {
+    public void setSeller(long seller) {
         this.seller = seller;
     }
 }

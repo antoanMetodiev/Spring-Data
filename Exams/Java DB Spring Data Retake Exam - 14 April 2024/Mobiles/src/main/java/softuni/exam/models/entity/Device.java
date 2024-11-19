@@ -1,36 +1,46 @@
 package softuni.exam.models.entity;
 
+import softuni.exam.models.enums.DeviceType;
+
 import javax.persistence.*;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.Positive;
 
 @Entity
 @Table(name = "devices")
-public class Device extends BaseEntity{
+public class Device extends BaseEntity {
 
     @Column(nullable = false)
-//    @Size(min = 2, max = 20)
     private String brand;
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "device_type")
+    @Enumerated(EnumType.STRING)
     private DeviceType deviceType;
 
-    @Column(unique = true, nullable = false)
-//    @Size(min = 1, max = 20)
+    @Column(nullable = false, unique = true)
     private String model;
 
     @Column
-    @Min(1)
+    @Positive
     private double price;
 
     @Column
-    @Min(1)
+    @Positive
     private int storage;
 
     @ManyToOne
-    @JoinColumn(name= "sale_id", referencedColumnName = "id")
+    @JoinColumn(name = "sale_id", referencedColumnName = "id")
     private Sale sale;
+
+    public Device(String brand, DeviceType deviceType, String model, double price, int storage, Sale sale) {
+        this.brand = brand;
+        this.deviceType = deviceType;
+        this.model = model;
+        this.price = price;
+        this.storage = storage;
+        this.sale = sale;
+    }
+
+    public Device() {}
 
     public String getBrand() {
         return brand;
@@ -56,21 +66,21 @@ public class Device extends BaseEntity{
         this.model = model;
     }
 
-    @Min(1)
+    @Positive
     public double getPrice() {
         return price;
     }
 
-    public void setPrice(@Min(1) double price) {
+    public void setPrice(@Positive double price) {
         this.price = price;
     }
 
-    @Min(1)
+    @Positive
     public int getStorage() {
         return storage;
     }
 
-    public void setStorage(@Min(1) int storage) {
+    public void setStorage(@Positive int storage) {
         this.storage = storage;
     }
 

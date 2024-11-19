@@ -13,14 +13,8 @@ public class XmlParserImpl implements XmlParser {
 
     @Override
     public <T> T fromFile(String filePath, Class<T> tClass) throws JAXBException {
-        // Създайте JAXB контекст за желания клас
-        JAXBContext context = JAXBContext.newInstance(tClass);
+        //TODO
 
-        // Създайте unmarshaller, който ще трансформира XML в обект
-        Unmarshaller unmarshaller = context.createUnmarshaller();
-
-        // Прочетете файла и парсирайте XML в обект от клас tClass
-        File file = new File(filePath);
-        return (T) unmarshaller.unmarshal(file);
+        return null;
     }
 }

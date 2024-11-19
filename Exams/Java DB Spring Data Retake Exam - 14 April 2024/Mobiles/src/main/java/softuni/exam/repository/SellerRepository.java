@@ -12,6 +12,5 @@ import java.util.Optional;
 @Repository
 public interface SellerRepository extends JpaRepository<Seller, Long> {
 
-
-    Optional<Seller> findByLastNameOrPersonalNumber(@Size(min = 2, max = 30) @NotNull String lastName, @Size(min = 3, max = 6) @NotNull String personalNumber);
+    Optional<Seller> findByLastName(@NotNull @Size(min = 2, max = 30) String lastName);
 }

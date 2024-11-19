@@ -1,8 +1,9 @@
 package softuni.exam.models.entity;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.util.Set;
 
 @Entity
@@ -10,19 +11,21 @@ import java.util.Set;
 public class Seller extends BaseEntity {
 
     @Column(name = "first_name", nullable = false)
-//    @Size(min = 2, max = 30)
     private String firstName;
 
-    @Column(name = "last_name", unique = true, nullable = false)
-//    @Size(min = 2, max = 30)
+    @Column(name = "last_name", nullable = false, unique = true)
     private String lastName;
 
-    @Column(name = "personal_number", unique = true, nullable = false)
-//    @Size(min = 3, max = 6)
+    @Column(name = "personal_number", nullable = false, unique = true)
     private String personalNumber;
 
-    @OneToMany(mappedBy = "seller")
-    private Set<Sale> sales;
+    public Seller(String firstName, String lastName, String personalNumber) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.personalNumber = personalNumber;
+    }
+
+    public Seller() {}
 
     public String getFirstName() {
         return firstName;
@@ -46,13 +49,5 @@ public class Seller extends BaseEntity {
 
     public void setPersonalNumber(String personalNumber) {
         this.personalNumber = personalNumber;
-    }
-
-    public Set<Sale> getSales() {
-        return sales;
-    }
-
-    public void setSales(Set<Sale> sales) {
-        this.sales = sales;
     }
 }

@@ -6,7 +6,6 @@
 //import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.boot.test.context.SpringBootTest;
 //import org.springframework.test.annotation.DirtiesContext;
-//import softuni.exam.service.impl.SellerServiceImpl;
 //
 //import java.io.File;
 //import java.io.FileWriter;
