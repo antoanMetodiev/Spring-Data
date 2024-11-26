@@ -12,26 +12,26 @@ public class Device extends BaseEntity {
     @Column(nullable = false)
     private String brand;
 
-    @Column(name = "device_type")
     @Enumerated(EnumType.STRING)
     private DeviceType deviceType;
 
-    @Column(nullable = false, unique = true)
+    @Column(unique = true, nullable = false)
     private String model;
 
-    @Column
     @Positive
+    @Column
     private double price;
 
-    @Column
     @Positive
+    @Column
     private int storage;
 
     @ManyToOne
     @JoinColumn(name = "sale_id", referencedColumnName = "id")
     private Sale sale;
 
-    public Device(String brand, DeviceType deviceType, String model, double price, int storage, Sale sale) {
+    public Device(long id, String brand, DeviceType deviceType, String model, double price, int storage, Sale sale) {
+        super(id);
         this.brand = brand;
         this.deviceType = deviceType;
         this.model = model;
@@ -40,7 +40,9 @@ public class Device extends BaseEntity {
         this.sale = sale;
     }
 
-    public Device() {}
+    public Device() {
+
+    }
 
     public String getBrand() {
         return brand;

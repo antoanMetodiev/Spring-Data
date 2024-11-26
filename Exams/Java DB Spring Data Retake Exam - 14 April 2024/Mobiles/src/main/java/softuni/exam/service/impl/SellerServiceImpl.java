@@ -3,7 +3,7 @@ package softuni.exam.service.impl;
 import com.google.gson.Gson;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-import softuni.exam.models.dto.jsons.SellerDto;
+import softuni.exam.models.dto.jsons.SellersDto;
 import softuni.exam.models.entity.Seller;
 import softuni.exam.repository.SellerRepository;
 import softuni.exam.service.SellerService;
@@ -16,7 +16,7 @@ import java.util.Optional;
 
 @Service
 public class SellerServiceImpl implements SellerService {
-    private final String FILE_PATH = "src/main/resources/files/json/sellers.json";
+    private final String FILE_TEXT = "src/main/resources/files/json/sellers.json";
 
     private final SellerRepository sellerRepository;
     private final ModelMapper modelMapper;
@@ -38,26 +38,27 @@ public class SellerServiceImpl implements SellerService {
 
     @Override
     public String readSellersFromFile() throws IOException {
-        return Files.readString(Path.of(FILE_PATH));
+        return Files.readString(Path.of(FILE_TEXT));
     }
 
     @Override
     public String importSellers() throws IOException {
         StringBuilder sb = new StringBuilder();
 
-        SellerDto[] sellerDtos = this.gson.fromJson(readSellersFromFile(), SellerDto[].class);
-        for (SellerDto seller : sellerDtos) {
+        SellersDto[] sellersDtos = this.gson.fromJson(readSellersFromFile(), SellersDto[].class);
+        for (SellersDto sellersDto : sellersDtos) {
 
-            Optional<Seller> byLastName = this.sellerRepository.findByLastName(seller.getLastName());
-            if (!this.validationUtil.isValid(seller) || byLastName.isPresent()) {
+            Optional<Seller> byLastName = this.sellerRepository.findByLastName(sellersDto.getLastName());
+
+            if (!this.validationUtil.isValid(sellersDto) || byLastName.isPresent()) {
                 sb.append("Invalid seller").append(System.lineSeparator());
                 continue;
             }
 
-            Seller forPers = this.modelMapper.map(seller, Seller.class);
+            Seller forPers = this.modelMapper.map(sellersDto, Seller.class);
             this.sellerRepository.saveAndFlush(forPers);
             sb.append(String.format("Successfully imported seller %s %s"
-                            , seller.getFirstName(), seller.getLastName()))
+                            , sellersDto.getFirstName(), sellersDto.getLastName()))
                     .append(System.lineSeparator());
         }
 

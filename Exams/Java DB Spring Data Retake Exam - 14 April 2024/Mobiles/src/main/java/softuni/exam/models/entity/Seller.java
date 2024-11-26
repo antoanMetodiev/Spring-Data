@@ -2,13 +2,12 @@ package softuni.exam.models.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import java.util.Set;
 
 @Entity
 @Table(name = "sellers")
 public class Seller extends BaseEntity {
+
 
     @Column(name = "first_name", nullable = false)
     private String firstName;
@@ -19,7 +18,8 @@ public class Seller extends BaseEntity {
     @Column(name = "personal_number", nullable = false, unique = true)
     private String personalNumber;
 
-    public Seller(String firstName, String lastName, String personalNumber) {
+    public Seller(long id, String firstName, String lastName, String personalNumber) {
+        super(id);
         this.firstName = firstName;
         this.lastName = lastName;
         this.personalNumber = personalNumber;
@@ -51,3 +51,4 @@ public class Seller extends BaseEntity {
         this.personalNumber = personalNumber;
     }
 }
+

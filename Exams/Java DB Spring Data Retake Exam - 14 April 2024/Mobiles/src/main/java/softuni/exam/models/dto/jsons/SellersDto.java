@@ -1,26 +1,24 @@
 package softuni.exam.models.dto.jsons;
 
-
 import com.google.gson.annotations.Expose;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-
 public class SellersDto {
     @Expose
-    @Size(min = 2, max = 30)
     @NotNull
+    @Size(min = 2, max = 30)
     private String firstName;
 
     @Expose
-    @Size(min = 2, max = 30)
     @NotNull
+    @Size(min = 2, max = 30)
     private String lastName;
 
     @Expose
-    @Size(min = 3, max = 6)
     @NotNull
+    @Size(min = 3, max = 6)
     private String personalNumber;
 
     public SellersDto(String firstName, String lastName, String personalNumber) {
@@ -29,27 +27,29 @@ public class SellersDto {
         this.personalNumber = personalNumber;
     }
 
-    public @Size(min = 2, max = 30) @NotNull String getFirstName() {
+    public SellersDto() {}
+
+    public @NotNull @Size(min = 2, max = 30) String getFirstName() {
         return firstName;
     }
 
-    public void setFirstName(@Size(min = 2, max = 30) @NotNull String firstName) {
+    public void setFirstName(@NotNull @Size(min = 2, max = 30) String firstName) {
         this.firstName = firstName;
     }
 
-    public @Size(min = 2, max = 30) @NotNull String getLastName() {
+    public @NotNull @Size(min = 2, max = 30) String getLastName() {
         return lastName;
     }
 
-    public void setLastName(@Size(min = 2, max = 30) @NotNull String lastName) {
+    public void setLastName(@NotNull @Size(min = 2, max = 30) String lastName) {
         this.lastName = lastName;
     }
 
-    public @Size(min = 3, max = 6) @NotNull String getPersonalNumber() {
+    public @NotNull @Size(min = 3, max = 6) String getPersonalNumber() {
         return personalNumber;
     }
 
-    public void setPersonalNumber(@Size(min = 3, max = 6) @NotNull String personalNumber) {
+    public void setPersonalNumber(@NotNull @Size(min = 3, max = 6) String personalNumber) {
         this.personalNumber = personalNumber;
     }
 }

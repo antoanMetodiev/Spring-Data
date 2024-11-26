@@ -1,16 +1,12 @@
 package softuni.exam.models.dto.jsons;
 
 import com.google.gson.annotations.Expose;
-import org.apache.tomcat.jni.Local;
 
-import javax.persistence.Column;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 public class SalesDto {
-
     @Expose
     private boolean discounted;
 
@@ -32,6 +28,8 @@ public class SalesDto {
         this.saleDate = saleDate;
         this.seller = seller;
     }
+
+    public SalesDto() {}
 
     public boolean isDiscounted() {
         return discounted;
@@ -65,10 +63,3 @@ public class SalesDto {
         this.seller = seller;
     }
 }
-
-//{
-//        "discounted":true,
-//        "number":"1000123",
-//        "saleDate":"2022-02-02 12:43:00",
-//        "seller":1
-//        },

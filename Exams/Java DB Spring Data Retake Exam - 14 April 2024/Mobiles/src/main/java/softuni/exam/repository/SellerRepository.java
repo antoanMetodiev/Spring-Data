@@ -8,7 +8,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Optional;
 
-//TODO
 @Repository
 public interface SellerRepository extends JpaRepository<Seller, Long> {
 

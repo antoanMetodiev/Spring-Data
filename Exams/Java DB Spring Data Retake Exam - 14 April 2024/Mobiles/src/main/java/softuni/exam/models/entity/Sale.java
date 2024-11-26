@@ -1,12 +1,11 @@
 package softuni.exam.models.entity;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "sales")
-public class Sale extends BaseEntity {
+public class Sale extends BaseEntity{
 
     @Column
     private boolean discounted;
@@ -21,10 +20,11 @@ public class Sale extends BaseEntity {
     @JoinColumn(name = "seller_id", referencedColumnName = "id")
     private Seller seller;
 
-    public Sale(boolean discounted, String number, LocalDateTime saleDateTime, Seller seller) {
+    public Sale(long id, boolean discounted, String number, LocalDateTime saleDate, Seller seller) {
+        super(id);
         this.discounted = discounted;
         this.number = number;
-        this.saleDate = saleDateTime;
+        this.saleDate = saleDate;
         this.seller = seller;
     }
 

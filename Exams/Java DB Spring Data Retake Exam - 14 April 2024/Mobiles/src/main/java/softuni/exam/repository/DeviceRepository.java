@@ -15,13 +15,11 @@ import java.util.Set;
 @Repository
 public interface DeviceRepository extends JpaRepository<Device, Long> {
 
-
     Optional<Device> findByBrandAndModel(@NotNull @Size(min = 2, max = 20) String brand, @Size(min = 1, max = 20) @NotNull String model);
 
-    Optional<Device> findByBrand(@NotNull @Size(min = 2, max = 20) String brand);
-
-    @Query("SELECT d.brand, d.model, d.storage, d.price FROM Device d" +
-            " WHERE d.deviceType = 'SMART_PHONE' AND d.price < 1000 AND d.storage >= 128" +
-            "ORDER BY LOWER(d.brand) ASC")
-    Set<Object> exportNeededData();
+    @Query(nativeQuery = true,
+            value = "SELECT * FROM devices " +
+                    "WHERE price < 1000 AND storage >= 128 AND device_type = 'SMART_PHONE' " +
+                    "ORDER BY LOWER(brand) ASC")
+    Set<Device> findByPriceLessThanAndStorageEqualsOrStorageGreaterThanOrderByBrandAscLowerCase();
 }

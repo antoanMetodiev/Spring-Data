@@ -11,20 +11,20 @@ import java.util.List;
 public class DeviceRootDto {
 
     @XmlElement(name = "device")
-    private List<DeviceSeedDto> deviceSeedDtoList;
+    private List<DeviceDto> deviceDtoList;
 
-    public DeviceRootDto(List<DeviceSeedDto> deviceSeedDtoList) {
-        this.deviceSeedDtoList = deviceSeedDtoList;
+    public DeviceRootDto(List<DeviceDto> deviceDtoList) {
+        this.deviceDtoList = deviceDtoList;
     }
 
     public DeviceRootDto() {
     }
 
-    public List<DeviceSeedDto> getDeviceSeedDtoList() {
-        return deviceSeedDtoList;
+    public List<DeviceDto> getDeviceDtoList() {
+        return deviceDtoList;
     }
 
-    public void setDeviceSeedDtoList(List<DeviceSeedDto> deviceSeedDtoList) {
-        this.deviceSeedDtoList = deviceSeedDtoList;
+    public void setDeviceDtoList(List<DeviceDto> deviceDtoList) {
+        this.deviceDtoList = deviceDtoList;
     }
 }

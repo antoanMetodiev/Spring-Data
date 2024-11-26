@@ -1,10 +1,9 @@
 package softuni.exam.service.impl;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import softuni.exam.models.dto.xmls.DeviceDto;
 import softuni.exam.models.dto.xmls.DeviceRootDto;
-import softuni.exam.models.dto.xmls.DeviceSeedDto;
 import softuni.exam.models.entity.Device;
 import softuni.exam.models.entity.Sale;
 import softuni.exam.repository.DeviceRepository;
@@ -27,15 +26,14 @@ public class DeviceServiceImpl implements DeviceService {
 
     private final DeviceRepository deviceRepository;
     private final SaleRepository saleRepository;
-    private final ValidationUtilImpl validationUtil;
     private final ModelMapper modelMapper;
+    private final ValidationUtilImpl validationUtil;
 
-    @Autowired
-    public DeviceServiceImpl(DeviceRepository deviceRepository, SaleRepository saleRepository, ValidationUtilImpl validationUtil, ModelMapper modelMapper) {
+    public DeviceServiceImpl(DeviceRepository deviceRepository, SaleRepository saleRepository, ModelMapper modelMapper, ValidationUtilImpl validationUtil) {
         this.deviceRepository = deviceRepository;
         this.saleRepository = saleRepository;
-        this.validationUtil = validationUtil;
         this.modelMapper = modelMapper;
+        this.validationUtil = validationUtil;
     }
 
 
@@ -53,27 +51,24 @@ public class DeviceServiceImpl implements DeviceService {
     public String importDevices() throws IOException, JAXBException {
         StringBuilder sb = new StringBuilder();
 
-        DeviceRootDto deviceDtos =
+        System.out.println();
+        DeviceRootDto deviceRootDto =
                 (DeviceRootDto) JAXBContext.newInstance(DeviceRootDto.class).createUnmarshaller().unmarshal(new File(FILE_PATH));
 
-        for (DeviceSeedDto deviceSeedDto : deviceDtos.getDeviceSeedDtoList()) {
+        for (DeviceDto deviceDto : deviceRootDto.getDeviceDtoList()) {
 
-            Optional<Device> byBrandAndModel =
-                    this.deviceRepository.findByBrandAndModel(deviceSeedDto.getBrand(), deviceSeedDto.getModel());
+            Optional<Device> byBrandAndModel = this.deviceRepository.findByBrandAndModel(deviceDto.getBrand(), deviceDto.getModel());
+            Optional<Sale> byId = this.saleRepository.findById(deviceDto.getSale_id());
 
-            Optional<Sale> byId = this.saleRepository.findById(deviceSeedDto.getSaleId());
-
-            if (!this.validationUtil.isValid(deviceSeedDto) || byBrandAndModel.isPresent() || byId.isEmpty()) {
+            if (!this.validationUtil.isValid(deviceDto) || byBrandAndModel.isPresent() || byId.isEmpty()) {
                 sb.append("Invalid device").append(System.lineSeparator());
                 continue;
             }
 
-            Device forPers =
-                    this.modelMapper.map(deviceSeedDto, Device.class);
-
-            this.deviceRepository.saveAndFlush(forPers);
+            Device forPersist = this.modelMapper.map(deviceDto, Device.class);
+            this.deviceRepository.saveAndFlush(forPersist);
             sb.append(String.format("Successfully imported device of type %s with brand %s"
-                            , deviceSeedDto.getDeviceType(), deviceSeedDto.getBrand()))
+                            , deviceDto.getDeviceType().toString(), deviceDto.getBrand()))
                     .append(System.lineSeparator());
         }
 
@@ -83,16 +78,18 @@ public class DeviceServiceImpl implements DeviceService {
     @Override
     public String exportDevices() {
         StringBuilder sb = new StringBuilder();
+        Set<Device> response = this.deviceRepository
+                .findByPriceLessThanAndStorageEqualsOrStorageGreaterThanOrderByBrandAscLowerCase();
 
-        Set<Object> res = this.deviceRepository.exportNeededData();
-        for (Object random : res) {
-
-            Object[] random1 = (Object[]) random;
-            sb.append(String.format("Device brand: %s\n" +
-                            "   *Model: %s\n" +
-                            "   **Storage: %s\n" +
-                            "   ***Price: %.2f\n",
-                    random1[0], random1[1], random1[2], random1[3]));
+        for (Device device : response) {
+            sb.append(String.format(
+                    "Device brand: %s\n" +
+                    "   *Model: %s\n" +
+                    "   **Storage: %s\n" +
+                    "   ***Price: %.2f"
+                    , device.getBrand(), device.getModel(),
+                            device.getStorage(), device.getPrice()))
+                    .append(System.lineSeparator());
         }
 
         return sb.toString();
